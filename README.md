@@ -2,7 +2,7 @@ Making input and output class-level variables can simplify the code and make it 
 Here’s an updated version of the C# competitive programming template with input and output as class-level variables:
 C# Competitive Programming Template with Class-Level Variables
 C#
-
+```
 using System;
 using System.IO;
 using System.Text;
@@ -67,7 +67,7 @@ class CPTemplate
         return sum;
     }
 }
-
+```
 ** Explanation: **
 
 
