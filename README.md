@@ -1,4 +1,4 @@
-##Making input and output class-level variables can simplify the code and make it more organized, especially for competitive programming where you often need to access these streams across multiple methods. This approach can help avoid passing the streams as parameters and make the code cleaner.
+Making input and output class-level variables can simplify the code and make it more organized, especially for competitive programming where you often need to access these streams across multiple methods. This approach can help avoid passing the streams as parameters and make the code cleaner.
 Here’s an updated version of the C# competitive programming template with input and output as class-level variables:
 C# Competitive Programming Template with Class-Level Variables
 C#
