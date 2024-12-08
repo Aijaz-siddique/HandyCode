@@ -1,0 +1,44 @@
+using System;
+using System.Collections.Generic;
+
+public class Program {
+
+    private static void Swap(int[] arr, int i, int j) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+
+    // Function to find the possible permutations.
+    // Initial value of idx is 0.
+    private static void Permutations(List<List<int>> res, int[] arr, int idx) {
+        if (idx == arr.Length) {
+            res.Add(new List<int>(arr));
+            return;
+        }
+
+        for (int i = idx; i < arr.Length; i++) {
+            Swap(arr, idx, i);
+            Permutations(res, arr, idx + 1);
+            Swap(arr, idx, i); // Backtracking
+        }
+    }
+
+    // Function to get the permutations
+    public static List<List<int>> Permute(int[] arr) {
+        List<List<int>> res = new List<List<int>>();
+        Permutations(res, arr, 0);
+        return res;
+    }
+
+    // Driver code
+    public static void Main() {
+        int[] arr = {1, 2, 3};
+        List<List<int>> res = Permute(arr);
+
+        // Printing result
+        foreach (List<int> perm in res) {
+            Console.WriteLine(string.Join(" ", perm));
+        }
+    }
+}
