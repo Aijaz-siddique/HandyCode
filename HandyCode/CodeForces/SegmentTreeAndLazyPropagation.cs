@@ -1,3 +1,5 @@
+//This for Range Query SUM only.
+//Code modification required if it is needed for Max/Min or any other operation on the range.
 namespace CP
 {
     public class SegmentTree
