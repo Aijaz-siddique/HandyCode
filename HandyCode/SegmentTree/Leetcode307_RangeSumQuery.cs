@@ -1,76 +1,75 @@
 public class NumArray {
-    public int[] _segmentTree;
-    public int _n = 1;
 
-    public void BuildSegmentTree(int i, int l, int r, int[] arr){
+    int[] _segmentTree;
+    int _n;
+    public NumArray(int[] nums) {
+        _n = nums.Length;
+        _segmentTree = new int[4*_n];
+
+        //(rootNodeIndex, leftBoundary, rightBoundary, nums)
+        BuildSegmentTree(0, 0, _n-1, nums);
+    }
+    
+    private void BuildSegmentTree(int i, int l, int r, int[] nums){
+
+        //leaf node
         if(l == r){
-            _segmentTree[i] = arr[l];
+            _segmentTree[i] = nums[l];
             return;
         }
 
-        int mid = l+((r-l)/2);
-        BuildSegmentTree(2*i+1, l, mid, arr);
-        BuildSegmentTree(2*i+2, mid+1, r, arr);
+        int mid = l +((r-l)>>1);
+        BuildSegmentTree(2*i+1, l, mid, nums);
+        BuildSegmentTree(2*i+2, mid+1, r, nums);
         _segmentTree[i] = _segmentTree[2*i+1] + _segmentTree[2*i+2];
 
     }
-  
-    public void UpdateSegmentTree(int i, int l, int r,int Idx, int val){
+    
+    public void Update(int index, int val) {
+        UpdateSegmentTree(index, val, 0, 0, _n-1);
+    }
+
+    private void UpdateSegmentTree(int Idx, int val, int i, int l, int r){
+
         if(l == r){
             _segmentTree[i] = val;
             return;
         }
 
-        int mid = l + ((r-l)/2);
-        if(Idx <= mid)
-            UpdateSegmentTree(2*i+1, l, mid, Idx, val);
-        else
-            UpdateSegmentTree(2*i+2, mid+1, r, Idx, val);
-
+        int mid = l+((r-l)>>1);
+        //Go to left child
+        if(Idx <= mid){
+            UpdateSegmentTree(Idx, val, 2*i+1, l, mid);
+        }else{ //Go to right child
+            UpdateSegmentTree(Idx, val, 2*i+2, mid+1, r);
+        }
         _segmentTree[i] = _segmentTree[2*i+1] + _segmentTree[2*i+2];
-
-    }
-
-    public int QuerySegmentTree(int start, int end, int i, int l, int r){
-
-        //no overlap
-        if(l > end || r < start){
-            return 0;
-        }
-
-        //Completely Overlap
-        if(l >= start && r <= end){
-            return _segmentTree[i];
-        }
-
-        int mid = l+((r-l)/2);
-        //Partial Overlap
-        return QuerySegmentTree( start, end, 2*i+1, l, mid)+QuerySegmentTree(  start, end, 2*i+2, mid+1, r);
-
-    }
-
-  /**
-   * Your NumArray object will be instantiated and called as such:
-   * NumArray obj = new NumArray(nums);
-   * obj.Update(index,val);
-   * int param_2 = obj.SumRange(left,right);
-   */
-    public NumArray(int[] nums) {
-        
-        _n = nums.Length;
-        _segmentTree = new int[4*_n];
-        BuildSegmentTree(0, 0, _n-1, nums);
-
-    }
-
-    public void Update(int index, int val) {
-        UpdateSegmentTree(0, 0, _n-1, index, val);
     }
     
     public int SumRange(int left, int right) {
-       return QuerySegmentTree( left, right, 0, 0, _n-1);
+        return QuerySegmentTree(left, right, 0, 0, _n-1);
     }
 
-    
-    
+    private int QuerySegmentTree(int left, int right, int i, int start, int end){
+        //No overlapping
+        if(start > right || end < left){
+            return 0;
+        }
+
+        //total overlap
+        if(start >= left && end <= right){
+            return _segmentTree[i];
+        }
+
+        //Partial Overlap
+        int mid = start+((end-start) >> 1);
+        return QuerySegmentTree(left, right, 2*i+1, start, mid) + QuerySegmentTree(left, right, 2*i+2, mid+1, end);
+    }
 }
+
+/**
+ * Your NumArray object will be instantiated and called as such:
+ * NumArray obj = new NumArray(nums);
+ * obj.Update(index,val);
+ * int param_2 = obj.SumRange(left,right);
+ */
